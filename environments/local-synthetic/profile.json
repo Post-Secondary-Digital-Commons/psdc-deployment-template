@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "profileId": "psdc-local-synthetic-v1",
+  "classification": "synthetic-only",
+  "maturity": "design-only",
+  "institutionApproved": false,
+  "productionEligible": false,
+  "runtimeReady": false,
+  "network": {
+    "mode": "loopback-simulation",
+    "bindAddress": "127.0.0.1",
+    "examplePrefix": "192.0.2.0/24",
+    "defaultInterzoneAction": "deny",
+    "zones": ["control", "compute-lab", "storage", "federation-disabled"],
+    "workerConnection": "outbound-only-to-cell-gateway",
+    "federationEnabled": false,
+    "publicIngressEnabled": false,
+    "permittedFlows": [
+      {
+        "sourceZone": "compute-lab",
+        "destinationZone": "control",
+        "service": "cell-gateway",
+        "transport": "mTLS",
+        "purpose": "synthetic worker enrollment and task channel"
+      },
+      {
+        "sourceZone": "control",
+        "destinationZone": "storage",
+        "service": "object-gateway",
+        "transport": "mTLS",
+        "purpose": "synthetic test object exchange"
+      }
+    ]
+  },
+  "identity": {
+    "authority": "synthetic-development-only",
+    "issuer": "https://issuer.psdc.invalid",
+    "workloadTrustDomain": "spiffe://synthetic.psdc.invalid",
+    "defaultAuthorization": "deny",
+    "acceptedSubjects": ["synthetic-test-runner", "synthetic-lab-worker"],
+    "realInstitutionAccountsAccepted": false
+  },
+  "keyManagement": {
+    "mode": "ephemeral-development",
+    "providerCandidate": "OpenBao",
+    "keyMaterialInRepository": false,
+    "productionTrustRootsAccepted": false,
+    "syntheticKeyClasses": ["artifact-attestation", "workload-session", "object-envelope"],
+    "keyLifetimeHoursMaximum": 24,
+    "rotationAndRevocationTestRequired": true
+  },
+  "data": {
+    "allowed": ["synthetic", "public-test"],
+    "protectedStudentRecordsAllowed": false,
+    "publicProviderAdaptersEnabled": false,
+    "publicContentNetworkEnabled": false
+  }
+}
